@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { randomUUID } from "node:crypto";
 import { mkdir, writeFile } from "node:fs/promises";
 import path from "node:path";
+import { put } from "@vercel/blob";
 import { ADMIN_SESSION_COOKIE, isValidAdminSession } from "@/lib/admin-auth";
 
 export const runtime = "nodejs";
@@ -57,12 +58,7 @@ async function uploadToVercelBlob(file: File, filePath: string): Promise<BlobUpl
     return { configured: false, url: null, error: null };
   }
 
-  const dynamicImport = new Function("specifier", "return import(specifier)") as (specifier: string) => Promise<{
-    put: (pathname: string, body: File, options: { access: "public"; addRandomSuffix?: boolean }) => Promise<{ url: string }>;
-  }>;
-
   try {
-    const { put } = await dynamicImport("@vercel/blob");
     const result = await put(filePath, file, {
       access: "public",
       addRandomSuffix: false,
