@@ -29,6 +29,23 @@ const uploadCopy: Record<UploadKind, { title: string; hint: string; accept: stri
   },
 };
 
+async function readUploadResponse(response: Response) {
+  const text = await response.text();
+
+  if (!text) {
+    return { ok: response.ok, message: response.ok ? "" : "上传接口没有返回错误详情。" };
+  }
+
+  try {
+    return JSON.parse(text) as { ok?: boolean; url?: string; fileName?: string; message?: string };
+  } catch {
+    return {
+      ok: false,
+      message: text.slice(0, 160) || "上传接口返回格式不正确。",
+    };
+  }
+}
+
 function fileNameFromUrl(url: string) {
   return url.split("/").pop() || "已配置文件";
 }
@@ -68,7 +85,7 @@ function UploadBox({
         method: "POST",
         body: formData,
       });
-      const result = (await response.json()) as { ok?: boolean; url?: string; fileName?: string; message?: string };
+      const result = await readUploadResponse(response);
 
       if (!response.ok || !result.ok || !result.url) {
         throw new Error(result.message || "上传失败，请稍后重试。");
@@ -152,7 +169,7 @@ function MultiUploadBox({
             method: "POST",
             body: formData,
           });
-          const result = (await response.json()) as { ok?: boolean; url?: string; fileName?: string; message?: string };
+          const result = await readUploadResponse(response);
 
           if (!response.ok || !result.ok || !result.url) {
             throw new Error(result.message || "上传失败，请稍后重试。");
