@@ -48,7 +48,7 @@ function cleanBaseName(fileName: string) {
 }
 
 async function uploadToVercelBlob(file: File, filePath: string) {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) {
+  if (!process.env.BLOB_READ_WRITE_TOKEN && !process.env.BLOB_STORE_ID) {
     return null;
   }
 
