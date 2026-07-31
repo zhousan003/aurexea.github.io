@@ -1,0 +1,319 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AurexEA 管理后台</title>
+    <meta name="robots" content="noindex, nofollow" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="admin-page">
+      <div class="admin-shell">
+        <aside class="admin-sidebar">
+          <div class="brand compact">
+            <span class="brand-mark" aria-hidden="true"><span></span></span>
+            <span><strong>AurexEA</strong><small>Admin</small></span>
+          </div>
+          <button class="admin-nav is-active" type="button" data-admin-link="dashboard">仪表盘</button>
+          <button class="admin-nav" type="button" data-admin-link="products">产品管理</button>
+          <button class="admin-nav" type="button" data-admin-link="categories">分类管理</button>
+          <button class="admin-nav" type="button" data-admin-link="ads">广告配置</button>
+          <button class="admin-nav" type="button" data-admin-link="donation">打赏配置</button>
+          <button class="admin-nav" type="button" data-admin-link="seo">SEO设置</button>
+          <a class="admin-return" href="index.html">返回前台</a>
+        </aside>
+
+        <div class="admin-main">
+          <section class="admin-view is-visible" data-admin-view="dashboard">
+            <div class="admin-heading">
+              <div>
+                <p class="eyebrow">后台管理</p>
+                <h1>后台仪表盘</h1>
+              </div>
+              <button class="primary-button" type="button" data-admin-link="products">新增 EA 产品</button>
+            </div>
+
+            <div class="metric-grid">
+              <article class="metric-card">
+                <span>今日访问量</span>
+                <strong data-visit-today>2,418</strong>
+                <small>页面访问代码写入 visit_events</small>
+              </article>
+              <article class="metric-card">
+                <span>今日下载</span>
+                <strong data-download-today>326</strong>
+                <small>完成下载事件后统计</small>
+              </article>
+              <article class="metric-card">
+                <span>上架产品</span>
+                <strong>224</strong>
+                <small>按 MT4 / MT5 / 分类管理</small>
+              </article>
+              <article class="metric-card">
+                <span>广告位</span>
+                <strong>4</strong>
+                <small>首页、详情页、下载框、侧栏</small>
+              </article>
+            </div>
+
+            <div class="admin-grid">
+              <section class="admin-panel">
+                <div class="panel-head">
+                  <h2>每日访问量</h2>
+                  <span>最近 7 天</span>
+                </div>
+                <div class="bar-chart" aria-label="Daily visits chart">
+                  <span style="height: 42%"><b>Mon</b></span>
+                  <span style="height: 58%"><b>Tue</b></span>
+                  <span style="height: 52%"><b>Wed</b></span>
+                  <span style="height: 76%"><b>Thu</b></span>
+                  <span style="height: 64%"><b>Fri</b></span>
+                  <span style="height: 88%"><b>Sat</b></span>
+                  <span style="height: 70%"><b>Sun</b></span>
+                </div>
+              </section>
+
+              <section class="admin-panel">
+                <div class="panel-head">
+                  <h2>下载排名</h2>
+                  <span>Top Products</span>
+                </div>
+                <ol class="ranking-list">
+                  <li><span>黄金量化剥头皮 EA MT5</span><strong>1,286</strong></li>
+                  <li><span>伦敦盘短线 EA MT4</span><strong>934</strong></li>
+                  <li><span>Prop Firm 回撤保护工具</span><strong>782</strong></li>
+                  <li><span>多品种趋势跟随 EA MT5</span><strong>619</strong></li>
+                  <li><span>新闻过滤助手</span><strong>405</strong></li>
+                </ol>
+              </section>
+            </div>
+          </section>
+
+          <section class="admin-view" data-admin-view="products">
+            <div class="admin-heading">
+              <div>
+                <p class="eyebrow">产品管理</p>
+                <h1>EA 产品管理</h1>
+              </div>
+              <button class="primary-button" type="button">上传 EA 软件</button>
+            </div>
+            <div class="admin-two-column">
+              <section class="admin-panel">
+                <div class="panel-head">
+                  <h2>新增 / 编辑产品</h2>
+                  <span>中英文内容独立维护</span>
+                </div>
+                <form class="admin-form">
+                  <label>产品中文标题<input type="text" value="带 SetFiles 的黄金量化剥头皮 EA MT5" /></label>
+                  <label>产品英文标题<input type="text" value="Gold Quant Scalper MT5 + SetFiles" /></label>
+                  <div class="form-grid">
+                    <label>平台<select><option>MT5</option><option>MT4</option><option>MT4/MT5</option></select></label>
+                    <label>分类<select><option>黄金 EA</option><option>剥头皮 EA</option><option>趋势 EA</option></select></label>
+                  </div>
+                  <div class="form-grid">
+                    <label>交易品种<input type="text" value="XAUUSD" /></label>
+                    <label>时间周期<input type="text" value="M5, M15" /></label>
+                  </div>
+                  <label>中文详情<textarea>这里填写产品策略说明、安装方法、参数建议和风险提示。</textarea></label>
+                  <label>英文详情<textarea>Write English product description, setup notes, parameters and risk notice here.</textarea></label>
+                  <label>产品图片上传<div class="upload-box">拖拽图片到这里，或点击上传 JPG / PNG / WebP</div></label>
+                  <label>EA 文件上传<div class="upload-box">支持 .ex4 / .ex5 / .mq4 / .mq5 / .zip</div></label>
+                  <div class="form-actions">
+                    <button class="primary-button" type="button">保存产品</button>
+                    <button class="secondary-button" type="button">保存草稿</button>
+                  </div>
+                </form>
+              </section>
+
+              <section class="admin-panel">
+                <div class="panel-head">
+                  <h2>产品列表</h2>
+                  <span>上架 / 下架 / 删除</span>
+                </div>
+                <div class="admin-table-wrap">
+                  <table class="admin-table">
+                    <thead>
+                      <tr><th>产品</th><th>平台</th><th>状态</th><th>操作</th></tr>
+                    </thead>
+                    <tbody>
+                      <tr><td>黄金量化剥头皮 EA</td><td>MT5</td><td><span class="status on">上架</span></td><td>编辑 下架</td></tr>
+                      <tr><td>伦敦盘短线 EA</td><td>MT4</td><td><span class="status on">上架</span></td><td>编辑 下架</td></tr>
+                      <tr><td>夜间回归 EA</td><td>MT4</td><td><span class="status off">草稿</span></td><td>编辑 删除</td></tr>
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section class="admin-view" data-admin-view="categories">
+            <div class="admin-heading">
+              <div>
+                <p class="eyebrow">分类管理</p>
+                <h1>产品分类管理</h1>
+              </div>
+              <button class="primary-button" type="button">新增分类</button>
+            </div>
+            <div class="admin-grid">
+              <section class="admin-panel">
+                <div class="panel-head"><h2>分类列表</h2><span>支持排序和上下架</span></div>
+                <div class="category-admin-list">
+                  <div><strong>MT4EA</strong><span>128 个产品</span><button>编辑</button></div>
+                  <div><strong>MT5EA</strong><span>96 个产品</span><button>编辑</button></div>
+                  <div><strong>热门 EA</strong><span>管理员推荐</span><button>编辑</button></div>
+                  <div><strong>黄金 EA</strong><span>72 个产品</span><button>编辑</button></div>
+                </div>
+              </section>
+              <section class="admin-panel">
+                <div class="panel-head"><h2>分类编辑</h2><span>SEO 字段独立配置</span></div>
+                <form class="admin-form">
+                  <label>中文分类名<input type="text" value="黄金 EA" /></label>
+                  <label>英文分类名<input type="text" value="Gold EA" /></label>
+                  <label>URL Slug<input type="text" value="gold-ea" /></label>
+                  <label>分类说明<textarea>适用于 XAUUSD 黄金交易的 EA、SetFiles 和辅助工具。</textarea></label>
+                  <div class="form-actions"><button class="primary-button" type="button">保存分类</button></div>
+                </form>
+              </section>
+            </div>
+          </section>
+
+          <section class="admin-view" data-admin-view="ads">
+            <div class="admin-heading">
+              <div>
+                <p class="eyebrow">广告配置</p>
+                <h1>下载广告配置</h1>
+              </div>
+              <button class="primary-button" type="button">新增广告位</button>
+            </div>
+            <div class="admin-two-column">
+              <section class="admin-panel">
+                <div class="panel-head"><h2>广告位设置</h2><span>下载前展示 5 秒</span></div>
+                <form class="admin-form">
+                  <label>广告位名称<input type="text" value="下载等待页主广告位" /></label>
+                  <label>广告联盟<select><option>Google AdSense</option><option>自定义广告联盟</option><option>关闭广告</option></select></label>
+                  <label>桌面端尺寸模板
+                    <select>
+                      <option>自适应 Responsive</option>
+                      <option>970x250 大横幅</option>
+                      <option>728x90 横幅</option>
+                      <option>336x280 大矩形</option>
+                      <option>300x250 矩形</option>
+                      <option>300x600 竖幅</option>
+                    </select>
+                  </label>
+                  <label>移动端尺寸模板
+                    <select>
+                      <option>自适应 Responsive</option>
+                      <option>320x100 移动横幅</option>
+                      <option>300x250 矩形</option>
+                      <option>336x280 大矩形</option>
+                    </select>
+                  </label>
+                  <label>桌面端广告代码<textarea class="code-area">&lt;ins class="adsbygoogle" data-ad-format="auto"&gt;&lt;/ins&gt;</textarea></label>
+                  <label>移动端广告代码<textarea class="code-area">&lt;ins class="adsbygoogle" data-full-width-responsive="true"&gt;&lt;/ins&gt;</textarea></label>
+                  <label>备用广告代码<textarea class="code-area">&lt;!-- 其他广告联盟或自定义 HTML --&gt;</textarea></label>
+                  <label>倒计时秒数<input type="number" value="5" /></label>
+                  <div class="form-actions"><button class="primary-button" type="button">保存广告配置</button></div>
+                </form>
+              </section>
+              <section class="admin-panel">
+                <div class="panel-head"><h2>广告位预览</h2><span>下载等待页主广告</span></div>
+                <div class="ad-preview-stack">
+                  <div class="ad-preview-size wide"><span>970x250</span><strong>桌面大横幅</strong></div>
+                  <div class="ad-preview-size banner"><span>728x90</span><strong>标准横幅</strong></div>
+                  <div class="ad-preview-size rectangle"><span>336x280</span><strong>矩形广告</strong></div>
+                  <div class="ad-preview-size mobile"><span>320x100</span><strong>移动端横幅</strong></div>
+                </div>
+                <p>注意：不要要求用户点击广告解锁下载，只使用广告展示和倒计时流程。下载等待页可承载更大的广告位。</p>
+              </section>
+            </div>
+          </section>
+
+          <section class="admin-view" data-admin-view="donation">
+            <div class="admin-heading">
+              <div>
+                <p class="eyebrow">打赏配置</p>
+                <h1>USDT 打赏设置</h1>
+              </div>
+              <button class="primary-button" type="button">保存设置</button>
+            </div>
+            <div class="admin-two-column">
+              <section class="admin-panel">
+                <div class="panel-head"><h2>收款信息</h2><span>前台弹窗展示</span></div>
+                <form class="admin-form">
+                  <label>弹窗标题<input type="text" value="请支持网站发展" /></label>
+                  <label>支持说明<textarea>你的打赏将用于服务器、文件存储、产品整理和网站持续更新。</textarea></label>
+                  <div class="form-grid">
+                    <label>二维码一链类型<select><option>USDT TRC20</option><option>USDT ERC20</option><option>USDT BEP20</option></select></label>
+                    <label>二维码一收款地址<input type="text" value="TAurexEAxxxxxxxxxxxxxxxxxxxx" /></label>
+                  </div>
+                  <label>二维码一上传<div class="upload-box">上传第一张 USDT 收款二维码</div></label>
+                  <div class="form-grid">
+                    <label>二维码二链类型<select><option>USDT ERC20</option><option>USDT TRC20</option><option>USDT BEP20</option></select></label>
+                    <label>二维码二收款地址<input type="text" value="0x7ec946743ef255f5E8AAAA4Ad6572Ebd7ce7165D4" /></label>
+                  </div>
+                  <label>二维码二上传<div class="upload-box">上传第二张 USDT 收款二维码</div></label>
+                </form>
+              </section>
+              <section class="admin-panel">
+                <div class="panel-head"><h2>弹窗预览</h2><span>用户点击打赏按钮后显示</span></div>
+                <div class="donate-preview">
+                  <div class="donate-icon">₮</div>
+                  <h2>请支持网站发展</h2>
+                  <p>你的打赏将用于服务器、文件存储、产品整理和网站持续更新。</p>
+                  <div class="qr-donation-grid">
+                    <article class="qr-donation-card">
+                      <div class="qr-placeholder"><span>USDT</span></div>
+                      <h3>USDT TRC20</h3>
+                      <div class="wallet-box"><span>收款地址</span><strong>TAurexEAxxxxxxxxxxxxxxxxxxxx</strong></div>
+                    </article>
+                    <article class="qr-donation-card">
+                      <div class="qr-placeholder alt"><span>USDT</span></div>
+                      <h3>USDT ERC20</h3>
+                      <div class="wallet-box"><span>收款地址</span><strong>0x7ec946743ef255f5E8AAAA4Ad6572Ebd7ce7165D4</strong></div>
+                    </article>
+                  </div>
+                </div>
+              </section>
+            </div>
+          </section>
+
+          <section class="admin-view" data-admin-view="seo">
+            <div class="admin-heading">
+              <div>
+                <p class="eyebrow">SEO 设置</p>
+                <h1>SEO 与多语言页面</h1>
+              </div>
+              <button class="primary-button" type="button">生成 Sitemap</button>
+            </div>
+            <div class="admin-two-column">
+              <section class="admin-panel">
+                <div class="panel-head"><h2>页面 SEO</h2><span>中文和英文分别配置</span></div>
+                <form class="admin-form">
+                  <label>页面<select><option>首页</option><option>MT4EA</option><option>MT5EA</option><option>产品详情页</option></select></label>
+                  <label>中文标题<input type="text" value="免费 MT4/MT5 EA 下载 - 曜汇EA" /></label>
+                  <label>中文描述<textarea>提供免费的 MT4/MT5 EA、SetFiles、指标和量化交易工具下载。</textarea></label>
+                  <label>英文标题<input type="text" value="Free MT4/MT5 Expert Advisors - AurexEA" /></label>
+                  <label>英文描述<textarea>Download free MT4/MT5 Expert Advisors, SetFiles and trading tools.</textarea></label>
+                  <div class="form-actions"><button class="primary-button" type="button">保存 SEO</button></div>
+                </form>
+              </section>
+              <section class="admin-panel">
+                <div class="panel-head"><h2>搜索引擎文件</h2><span>Vercel 部署标准</span></div>
+                <ul class="seo-list">
+                  <li><strong>sitemap.xml</strong><span>自动包含首页、分类页和产品详情页</span></li>
+                  <li><strong>robots.txt</strong><span>允许前台收录，禁止后台收录</span></li>
+                  <li><strong>hreflang</strong><span>中文和英文页面互相关联</span></li>
+                  <li><strong>结构化数据</strong><span>SoftwareApplication + BreadcrumbList</span></li>
+                </ul>
+              </section>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <script src="admin.js"></script>
+  </body>
+</html>

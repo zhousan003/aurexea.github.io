@@ -1,0 +1,10 @@
+.env
+.env*.local
+.next/
+node_modules/
+dist/
+build/
+*.tsbuildinfo
+.DS_Store
+public/uploads/
+.local-data/

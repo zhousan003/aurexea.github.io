@@ -1,0 +1,21 @@
+services:
+  postgres:
+    image: m.daocloud.io/docker.io/library/postgres:16-alpine
+    container_name: aurexea-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: aurexea
+      POSTGRES_USER: aurexea
+      POSTGRES_PASSWORD: aurexea_local_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - aurexea-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U aurexea -d aurexea"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  aurexea-postgres-data:
