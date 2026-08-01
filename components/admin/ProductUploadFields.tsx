@@ -54,11 +54,13 @@ function fileNameFromUrl(url: string) {
 function UploadBox({
   kind,
   fieldName,
+  fileNameFieldName,
   title,
   defaultUrl,
 }: {
   kind: UploadKind;
   fieldName: string;
+  fileNameFieldName?: string;
   title?: string;
   defaultUrl?: string | null;
 }) {
@@ -67,6 +69,7 @@ function UploadBox({
     defaultUrl ? { status: "done", url: defaultUrl, message: "已保存文件" } : { status: "idle" },
   );
   const [selectedUrl, setSelectedUrl] = useState(defaultUrl || "");
+  const [selectedFileName, setSelectedFileName] = useState(defaultUrl ? fileNameFromUrl(defaultUrl) : "");
   const copy = uploadCopy[kind];
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -100,6 +103,7 @@ function UploadBox({
         message: "上传成功",
       });
       setSelectedUrl(result.url || "");
+      setSelectedFileName(result.fileName || file.name);
     } catch (error) {
       setUpload({
         status: "error",
@@ -131,12 +135,14 @@ function UploadBox({
         </a>
       ) : null}
       {selectedUrl ? <input type="hidden" name={fieldName} value={selectedUrl} /> : <input type="hidden" name={fieldName} value="" />}
+      {fileNameFieldName ? <input type="hidden" name={fileNameFieldName} value={selectedFileName} /> : null}
       {selectedUrl ? (
         <button
           className="upload-clear-button"
           type="button"
           onClick={() => {
             setSelectedUrl("");
+            setSelectedFileName("");
             setUpload({ status: "idle", message: "已清空，保存后将移除旧文件" });
           }}
         >
@@ -277,7 +283,7 @@ export function ProductUploadFields({
     <>
       <UploadBox kind="product-image" fieldName="thumbnailUrl" title="首页产品小图上传" defaultUrl={thumbnailUrl} />
       <MultiUploadBox fieldName="reportImageUrls" defaultUrls={reportImages} />
-      <UploadBox kind="ea-file" fieldName="fileUrl" defaultUrl={fileUrl} />
+      <UploadBox kind="ea-file" fieldName="fileUrl" fileNameFieldName="fileName" defaultUrl={fileUrl} />
     </>
   );
 }

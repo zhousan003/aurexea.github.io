@@ -160,7 +160,7 @@ export async function saveProduct(formData: FormData) {
     .map((url) => url.trim())
     .filter(Boolean);
   const fileUrl = optionalStr(formData, "fileUrl");
-  const fileName = fileUrl?.split("/").pop() || "EA package";
+  const fileName = optionalStr(formData, "fileName") || fileUrl?.split("/").pop() || "EA package";
 
   if (!slug || !titleZh || !titleEn) {
     throw new Error("产品标题和 Slug 必填。");

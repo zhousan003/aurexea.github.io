@@ -412,7 +412,7 @@ export async function saveLocalProduct(input: {
           id: `${id}-file-${Date.now()}`,
           productId: id,
           version: input.version || "1.0.0",
-          fileName: input.fileName || "EA package",
+          fileName: input.fileName || (input.fileUrl.split("/").pop() || "EA package"),
           fileUrl: input.fileUrl,
           fileType: (input.fileName || input.fileUrl).split(".").pop() || "zip",
           status: PublishStatus.PUBLISHED,
