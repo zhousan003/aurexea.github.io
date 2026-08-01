@@ -17,8 +17,9 @@ export function DownloadWait({
   const countdownSeconds = adSlot?.countdownSeconds ?? 5;
   const [seconds, setSeconds] = useState(countdownSeconds);
   const [ready, setReady] = useState(false);
-  const [downloadUrl, setDownloadUrl] = useState(product.fileUrl || "");
+  const [downloadUrl, setDownloadUrl] = useState("");
   const adCode = adSlot?.desktopCode || adSlot?.fallbackCode || "";
+  const downloadPath = `/api/download-file?productId=${encodeURIComponent(product.id || "")}&slug=${encodeURIComponent(product.slug)}&locale=${locale}`;
 
   useEffect(() => {
     setReady(false);
@@ -44,7 +45,7 @@ export function DownloadWait({
           .then((response) => response.json())
           .then((result: { downloadUrl?: string }) => {
             if (result.downloadUrl && result.downloadUrl !== "#download-file") {
-              setDownloadUrl(result.downloadUrl);
+              setDownloadUrl(downloadPath);
             }
           })
           .finally(() => {
@@ -67,7 +68,7 @@ export function DownloadWait({
     return () => {
       window.clearInterval(timer);
     };
-  }, [countdownSeconds, locale, product.fileId, product.fileUrl, product.id, product.slug]);
+  }, [countdownSeconds, downloadPath, locale, product.fileId, product.fileUrl, product.id, product.slug]);
 
   return (
     <div className="download-page-shell">
@@ -95,7 +96,7 @@ export function DownloadWait({
       <div className="download-wait-card">
         <div className="download-result is-visible">
           {ready ? (
-            <a href={downloadUrl || "#download-file"}>{locale === "zh" ? "下载 EA 文件" : "Download EA File"}</a>
+            <a href={downloadUrl || downloadPath}>{locale === "zh" ? "下载 EA 文件" : "Download EA File"}</a>
           ) : (
             <>
               <span>{seconds}</span>
