@@ -1,6 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import {
   AdNetwork,
@@ -196,6 +197,7 @@ export async function saveProduct(formData: FormData) {
 
     revalidatePath("/admin/products");
     revalidatePublicPages(slug);
+    redirect(`/admin/products?saved=1&slug=${encodeURIComponent(slug)}`);
     return;
   }
 
@@ -267,6 +269,7 @@ export async function saveProduct(formData: FormData) {
 
   revalidatePath("/admin/products");
   revalidatePublicPages(slug);
+  redirect(`/admin/products?saved=1&slug=${encodeURIComponent(slug)}`);
 }
 
 export async function setProductStatus(formData: FormData) {
@@ -341,6 +344,7 @@ export async function saveCategory(formData: FormData) {
 
     revalidatePath("/admin/categories");
     revalidatePublicPages(category.slug);
+    redirect(`/admin/categories?saved=1&slug=${encodeURIComponent(category.slug)}`);
     return;
   }
 
@@ -360,6 +364,7 @@ export async function saveCategory(formData: FormData) {
 
   revalidatePath("/admin/categories");
   revalidatePublicPages(category.slug);
+  redirect(`/admin/categories?saved=1&slug=${encodeURIComponent(category.slug)}`);
 }
 
 export async function setCategoryStatus(formData: FormData) {

@@ -81,7 +81,8 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, message: "未找到可下载文件。" }, { status: 404 });
   }
 
-  const response = await fetch(info.url, { cache: "no-store" });
+  const downloadSource = new URL(info.url, request.url);
+  const response = await fetch(downloadSource, { cache: "no-store" });
 
   if (!response.ok || !response.body) {
     return NextResponse.json({ ok: false, message: "文件读取失败。" }, { status: 502 });

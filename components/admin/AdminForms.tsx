@@ -42,10 +42,12 @@ export function ProductAdminPage({
   products,
   categories,
   editingProduct,
+  savedSlug,
 }: {
   products: AdminProductRecord[];
   categories: AdminCategory[];
   editingProduct?: AdminProductRecord | null;
+  savedSlug?: string | null;
 }) {
   const zhTranslation = productTranslation(editingProduct, "zh");
   const enTranslation = productTranslation(editingProduct, "en");
@@ -65,6 +67,7 @@ export function ProductAdminPage({
           {editingProduct ? "编辑当前产品" : "上传 EA 软件"}
         </a>
       </div>
+      {savedSlug ? <div className="admin-toast success">已保存产品：{savedSlug}</div> : null}
       <div className="admin-two-column">
         <section className="admin-panel" id="product-upload-form">
           <div className="panel-head">
@@ -153,9 +156,11 @@ export function ProductAdminPage({
 export function CategoryAdminPage({
   categories,
   editingCategory,
+  savedSlug,
 }: {
   categories: AdminCategory[];
   editingCategory?: AdminCategory | null;
+  savedSlug?: string | null;
 }) {
   const zhTranslation = categoryTranslation(editingCategory, "zh");
   const enTranslation = categoryTranslation(editingCategory, "en");
@@ -168,6 +173,7 @@ export function CategoryAdminPage({
           {editingCategory ? "编辑当前分类" : "新增分类"}
         </a>
       </div>
+      {savedSlug ? <div className="admin-toast success">已保存分类：{savedSlug}</div> : null}
       <div className="admin-grid">
         <section className="admin-panel">
           <div className="panel-head"><h2>分类列表</h2><span>新增 / 编辑 / 上下架 / 删除</span></div>

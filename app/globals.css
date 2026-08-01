@@ -1586,6 +1586,21 @@ select {
   color: var(--red);
 }
 
+.admin-toast {
+  margin: 0 0 18px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 12px 14px;
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.admin-toast.success {
+  border-color: rgba(23, 132, 95, 0.24);
+  color: var(--green);
+  background: #f4fff8;
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
