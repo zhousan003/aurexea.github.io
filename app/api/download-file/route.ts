@@ -33,7 +33,6 @@ async function getFileInfo(productId?: string, slug?: string, locale: Locale = L
         include: {
           translations: true,
           files: {
-            where: { status: "PUBLISHED" },
             orderBy: { createdAt: "desc" },
           },
         },
@@ -44,7 +43,6 @@ async function getFileInfo(productId?: string, slug?: string, locale: Locale = L
           include: {
             translations: true,
             files: {
-              where: { status: "PUBLISHED" },
               orderBy: { createdAt: "desc" },
             },
           },
@@ -55,13 +53,14 @@ async function getFileInfo(productId?: string, slug?: string, locale: Locale = L
     return null;
   }
 
-  if (!product.files.length) {
+  const file = product.files.find((item) => item.status === "PUBLISHED") || product.files[0];
+
+  if (!file) {
     return { missingFile: true as const, productSlug: product.slug };
   }
 
   const zhTitle = product.translations.find((item) => item.locale === Locale.zh)?.title || product.slug;
   const enTitle = product.translations.find((item) => item.locale === Locale.en)?.title || zhTitle;
-  const file = product.files[0];
   const title = locale === Locale.en ? enTitle : zhTitle;
   const fileName = sanitizeDownloadName(title);
   const extension = file.fileType || extensionFromUrl(file.fileUrl);

@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { PublishStatus } from "@prisma/client";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
@@ -12,11 +13,26 @@ export async function POST(request: Request) {
 
   if (hasDatabaseUrl()) {
     const product = body.productId
-      ? await prisma.product.findUnique({ where: { id: body.productId }, include: { files: true } }).catch(() => null)
+      ? await prisma.product.findUnique({
+          where: { id: body.productId },
+          include: {
+            files: {
+              orderBy: { createdAt: "desc" },
+            },
+          },
+        }).catch(() => null)
       : body.slug
-        ? await prisma.product.findUnique({ where: { slug: body.slug }, include: { files: true } }).catch(() => null)
+        ? await prisma.product.findUnique({
+            where: { slug: body.slug },
+            include: {
+              files: {
+                orderBy: { createdAt: "desc" },
+              },
+            },
+          }).catch(() => null)
         : null;
-    if (product?.files[0]) {
+    const file = product?.files.find((item) => item.status === PublishStatus.PUBLISHED) || product?.files[0];
+    if (product && file) {
       downloadUrl = `/api/download-file?productId=${encodeURIComponent(product.id)}&slug=${encodeURIComponent(product.slug)}&locale=${locale}`;
     }
   }
