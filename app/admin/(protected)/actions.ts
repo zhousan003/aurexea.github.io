@@ -316,6 +316,7 @@ export async function deleteProduct(formData: FormData) {
 
   revalidatePath("/admin/products");
   revalidatePublicPages(product.slug);
+  redirect("/admin/products?deleted=1");
 }
 
 export async function saveCategory(formData: FormData) {
@@ -409,6 +410,7 @@ export async function deleteCategory(formData: FormData) {
   revalidatePath("/admin/categories");
   revalidatePath("/admin/products");
   revalidatePublicPages(category.slug);
+  redirect("/admin/categories?deleted=1");
 }
 
 export async function saveAdSlot(formData: FormData) {

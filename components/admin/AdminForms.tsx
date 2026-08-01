@@ -43,11 +43,13 @@ export function ProductAdminPage({
   categories,
   editingProduct,
   savedSlug,
+  deleted,
 }: {
   products: AdminProductRecord[];
   categories: AdminCategory[];
   editingProduct?: AdminProductRecord | null;
   savedSlug?: string | null;
+  deleted?: boolean;
 }) {
   const zhTranslation = productTranslation(editingProduct, "zh");
   const enTranslation = productTranslation(editingProduct, "en");
@@ -68,6 +70,7 @@ export function ProductAdminPage({
         </a>
       </div>
       {savedSlug ? <div className="admin-toast success">已保存产品：{savedSlug}</div> : null}
+      {deleted ? <div className="admin-toast success">产品已删除</div> : null}
       <div className="admin-two-column">
         <section className="admin-panel" id="product-upload-form">
           <div className="panel-head">
@@ -157,10 +160,12 @@ export function CategoryAdminPage({
   categories,
   editingCategory,
   savedSlug,
+  deleted,
 }: {
   categories: AdminCategory[];
   editingCategory?: AdminCategory | null;
   savedSlug?: string | null;
+  deleted?: boolean;
 }) {
   const zhTranslation = categoryTranslation(editingCategory, "zh");
   const enTranslation = categoryTranslation(editingCategory, "en");
@@ -174,6 +179,7 @@ export function CategoryAdminPage({
         </a>
       </div>
       {savedSlug ? <div className="admin-toast success">已保存分类：{savedSlug}</div> : null}
+      {deleted ? <div className="admin-toast success">分类已删除</div> : null}
       <div className="admin-grid">
         <section className="admin-panel">
           <div className="panel-head"><h2>分类列表</h2><span>新增 / 编辑 / 上下架 / 删除</span></div>
