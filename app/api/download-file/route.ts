@@ -51,8 +51,12 @@ async function getFileInfo(productId?: string, slug?: string, locale: Locale = L
         }).catch(() => null)
       : null;
 
-  if (!product?.files.length) {
+  if (!product) {
     return null;
+  }
+
+  if (!product.files.length) {
+    return { missingFile: true as const, productSlug: product.slug };
   }
 
   const zhTitle = product.translations.find((item) => item.locale === Locale.zh)?.title || product.slug;
@@ -81,6 +85,10 @@ export async function GET(request: Request) {
 
   if (!info) {
     return NextResponse.json({ ok: false, message: "未找到可下载文件。" }, { status: 404 });
+  }
+
+  if ("missingFile" in info) {
+    return NextResponse.json({ ok: false, message: "该产品尚未配置下载文件。" }, { status: 404 });
   }
 
   if (info.url.startsWith("/uploads/")) {

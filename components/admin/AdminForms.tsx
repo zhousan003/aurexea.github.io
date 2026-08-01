@@ -77,6 +77,9 @@ export function ProductAdminPage({
             <h2>{editingProduct ? "编辑产品" : "新增产品"}</h2>
             <span>保存后同步前台页面</span>
           </div>
+          {editingProduct && !editingProduct.files.length ? (
+            <div className="admin-toast">当前产品未配置下载文件</div>
+          ) : null}
           <form className="admin-form" action={saveProduct}>
             {editingProduct ? <input type="hidden" name="id" value={editingProduct.id} /> : null}
             <label>
