@@ -2,7 +2,12 @@ import { NextResponse } from "next/server";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
-  const body = (await request.json().catch(() => ({}))) as { productId?: string; slug?: string };
+  const body = (await request.json().catch(() => ({}))) as {
+    productId?: string;
+    slug?: string;
+    locale?: "zh" | "en";
+  };
+  const locale = body.locale === "en" ? "en" : "zh";
   let downloadUrl = "#download-file";
 
   if (hasDatabaseUrl()) {
@@ -11,7 +16,9 @@ export async function POST(request: Request) {
       : body.slug
         ? await prisma.product.findUnique({ where: { slug: body.slug }, include: { files: true } }).catch(() => null)
         : null;
-    downloadUrl = product?.files[0]?.fileUrl || downloadUrl;
+    if (product?.files[0]) {
+      downloadUrl = `/api/download-file?productId=${encodeURIComponent(product.id)}&slug=${encodeURIComponent(product.slug)}&locale=${locale}`;
+    }
   }
 
   return NextResponse.json({

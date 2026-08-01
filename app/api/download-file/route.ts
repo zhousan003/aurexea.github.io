@@ -1,4 +1,6 @@
 import { NextResponse } from "next/server";
+import { readFile } from "node:fs/promises";
+import path from "node:path";
 import { Locale } from "@prisma/client";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 
@@ -81,10 +83,27 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: false, message: "未找到可下载文件。" }, { status: 404 });
   }
 
-  const downloadSource = new URL(info.url, request.url);
-  const response = await fetch(downloadSource, { cache: "no-store" });
+  if (info.url.startsWith("/uploads/")) {
+    const filePath = path.join(process.cwd(), "public", info.url);
+    const file = await readFile(filePath).catch(() => null);
 
-  if (!response.ok || !response.body) {
+    if (!file) {
+      return NextResponse.json({ ok: false, message: "文件读取失败。" }, { status: 502 });
+    }
+
+    return new NextResponse(file, {
+      headers: {
+        "Content-Type": "application/octet-stream",
+        "Content-Disposition": `attachment; filename="${info.downloadName.replace(/"/g, "")}"`,
+        "Cache-Control": "no-store",
+      },
+    });
+  }
+
+  const downloadSource = new URL(info.url, request.url);
+  const response = await fetch(downloadSource, { cache: "no-store" }).catch(() => null);
+
+  if (!response?.ok || !response.body) {
     return NextResponse.json({ ok: false, message: "文件读取失败。" }, { status: 502 });
   }
 

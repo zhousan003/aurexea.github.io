@@ -45,7 +45,7 @@ export function DownloadWait({
           .then((response) => response.json())
           .then((result: { downloadUrl?: string }) => {
             if (result.downloadUrl && result.downloadUrl !== "#download-file") {
-              setDownloadUrl(downloadPath);
+              setDownloadUrl(result.downloadUrl);
             }
           })
           .finally(() => {
