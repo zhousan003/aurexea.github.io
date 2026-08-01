@@ -256,6 +256,12 @@ export async function saveProduct(formData: FormData) {
   }
 
   if (fileUrl) {
+    await prisma.productFile.deleteMany({
+      where: {
+        productId: product.id,
+      },
+    });
+
     await prisma.productFile.create({
       data: {
         productId: product.id,

@@ -134,7 +134,7 @@ function UploadBox({
           查看已上传文件
         </a>
       ) : null}
-      {selectedUrl ? <input type="hidden" name={fieldName} value={selectedUrl} /> : <input type="hidden" name={fieldName} value="" />}
+      <input type="hidden" name={fieldName} value={selectedUrl} />
       {fileNameFieldName ? <input type="hidden" name={fileNameFieldName} value={selectedFileName} /> : null}
       {selectedUrl ? (
         <button
