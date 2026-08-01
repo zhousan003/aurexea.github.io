@@ -5,6 +5,7 @@ import { useRef, useState } from "react";
 type UploadKind = "product-image" | "ea-file" | "donation-qr";
 
 type UploadState = {
+  id?: string;
   status: "idle" | "uploading" | "done" | "error";
   fileName?: string;
   url?: string;
@@ -65,6 +66,7 @@ function UploadBox({
   const [upload, setUpload] = useState<UploadState>(
     defaultUrl ? { status: "done", url: defaultUrl, message: "已保存文件" } : { status: "idle" },
   );
+  const [selectedUrl, setSelectedUrl] = useState(defaultUrl || "");
   const copy = uploadCopy[kind];
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -97,6 +99,7 @@ function UploadBox({
         url: result.url,
         message: "上传成功",
       });
+      setSelectedUrl(result.url || "");
     } catch (error) {
       setUpload({
         status: "error",
@@ -122,12 +125,24 @@ function UploadBox({
         <span>{upload.fileName || (upload.url ? "已配置文件地址" : copy.hint)}</span>
         <small>{upload.message || "上传后会自动生成文件地址"}</small>
       </button>
-      {upload.url ? (
-        <a className="upload-result-link" href={upload.url} target="_blank" rel="noreferrer">
+      {selectedUrl ? (
+        <a className="upload-result-link" href={selectedUrl} target="_blank" rel="noreferrer">
           查看已上传文件
         </a>
       ) : null}
-      {upload.url ? <input type="hidden" name={fieldName} value={upload.url} /> : null}
+      {selectedUrl ? <input type="hidden" name={fieldName} value={selectedUrl} /> : <input type="hidden" name={fieldName} value="" />}
+      {selectedUrl ? (
+        <button
+          className="upload-clear-button"
+          type="button"
+          onClick={() => {
+            setSelectedUrl("");
+            setUpload({ status: "idle", message: "已清空，保存后将移除旧文件" });
+          }}
+        >
+          清空当前文件
+        </button>
+      ) : null}
     </label>
   );
 }
@@ -141,7 +156,13 @@ function MultiUploadBox({
 }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [uploads, setUploads] = useState<UploadState[]>(
-    defaultUrls.map((url) => ({ status: "done", url, fileName: fileNameFromUrl(url), message: "已保存图片" })),
+    defaultUrls.map((url, index) => ({
+      id: `${url}-${index}`,
+      status: "done",
+      url,
+      fileName: fileNameFromUrl(url),
+      message: "已保存图片",
+    })),
   );
 
   async function handleFileChange(event: React.ChangeEvent<HTMLInputElement>) {
@@ -152,6 +173,7 @@ function MultiUploadBox({
     }
 
     const pendingUploads: UploadState[] = files.map((file) => ({
+      id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       status: "uploading",
       fileName: file.name,
       message: "正在上传...",
@@ -176,6 +198,7 @@ function MultiUploadBox({
           }
 
           return {
+            id: `${result.url}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
             status: "done" as const,
             fileName: result.fileName || file.name,
             url: result.url,
@@ -183,6 +206,7 @@ function MultiUploadBox({
           };
         } catch (error) {
           return {
+            id: `${file.name}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
             status: "error" as const,
             fileName: file.name,
             message: error instanceof Error ? error.message : "上传失败，请稍后重试。",
@@ -198,7 +222,7 @@ function MultiUploadBox({
     event.target.value = "";
   }
 
-  const urls = uploads.flatMap((upload) => (upload.url ? [upload.url] : []));
+  const hiddenValue = uploads.filter((upload) => upload.url).map((upload) => upload.url as string).join("\n");
 
   return (
     <label className="upload-field">
@@ -217,14 +241,25 @@ function MultiUploadBox({
       </button>
       {uploads.length ? (
         <div className="upload-chip-list">
-          {uploads.map((upload, index) => (
-            <span key={`${upload.fileName}-${index}`} className={upload.status}>
+          {uploads.map((upload) => (
+            <span key={upload.id || upload.url || upload.fileName} className={upload.status}>
               {upload.fileName || upload.message}
+              {upload.url ? (
+                <button
+                  type="button"
+                  className="upload-chip-remove"
+                  onClick={() => {
+                    setUploads((current) => current.filter((item) => item.id !== upload.id));
+                  }}
+                >
+                  删除
+                </button>
+              ) : null}
             </span>
           ))}
         </div>
       ) : null}
-      <input type="hidden" name={fieldName} value={urls.join("\n")} />
+      <input type="hidden" name={fieldName} value={hiddenValue} />
     </label>
   );
 }

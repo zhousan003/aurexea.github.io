@@ -1565,6 +1565,27 @@ select {
   text-decoration: none;
 }
 
+.upload-clear-button,
+.upload-chip-remove {
+  border: 0;
+  background: transparent;
+  color: var(--gold-dark);
+  font-size: 12px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.upload-clear-button {
+  justify-self: start;
+  padding: 0;
+}
+
+.upload-chip-remove {
+  margin-left: 8px;
+  padding: 0;
+  color: var(--red);
+}
+
 .visually-hidden {
   position: absolute;
   width: 1px;
@@ -1835,6 +1856,7 @@ code {
   display: grid;
   width: 100%;
   aspect-ratio: 1 / 1;
+  overflow: hidden;
   place-items: center;
   border: 1px solid rgba(47, 94, 240, 0.2);
   border-radius: 8px;
@@ -1862,9 +1884,13 @@ code {
 }
 
 .qr-placeholder img {
-  width: min(100%, 180px);
-  aspect-ratio: 1;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
+  object-position: center;
+  padding: 14px;
+  box-sizing: border-box;
+  display: block;
 }
 
 @media (max-width: 1180px) {
