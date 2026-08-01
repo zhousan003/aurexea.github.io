@@ -22,6 +22,25 @@ function extensionFromUrl(url: string) {
   }
 }
 
+function asciiFallbackFileName(fileName: string) {
+  const extension = path.extname(fileName) || ".zip";
+  const baseName = path.basename(fileName, extension);
+  const asciiBaseName = baseName
+    .replace(/[^\x20-\x7E]+/g, "")
+    .replace(/[\\/:*?"<>|;=%]+/g, "-")
+    .replace(/\s+/g, "-")
+    .replace(/-+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .slice(0, 80) || "EA-package";
+
+  return `${asciiBaseName}${extension}`;
+}
+
+function contentDisposition(downloadName: string) {
+  const fallbackName = asciiFallbackFileName(downloadName).replace(/"/g, "");
+  return `attachment; filename="${fallbackName}"; filename*=UTF-8''${encodeURIComponent(downloadName)}`;
+}
+
 async function getFileInfo(productId?: string, slug?: string, locale: Locale = Locale.zh) {
   if (!hasDatabaseUrl()) {
     return null;
@@ -101,7 +120,7 @@ export async function GET(request: Request) {
     return new NextResponse(file, {
       headers: {
         "Content-Type": "application/octet-stream",
-        "Content-Disposition": `attachment; filename="${info.downloadName.replace(/"/g, "")}"`,
+        "Content-Disposition": contentDisposition(info.downloadName),
         "Cache-Control": "no-store",
       },
     });
@@ -117,7 +136,7 @@ export async function GET(request: Request) {
   return new NextResponse(response.body, {
     headers: {
       "Content-Type": response.headers.get("content-type") || "application/octet-stream",
-      "Content-Disposition": `attachment; filename="${info.downloadName.replace(/"/g, "")}"`,
+      "Content-Disposition": contentDisposition(info.downloadName),
       "Cache-Control": "no-store",
     },
   });
