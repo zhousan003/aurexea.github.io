@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { upload } from "@vercel/blob/client";
+import { uploadPresigned } from "@vercel/blob/client";
 
 type UploadKind = "product-image" | "ea-file" | "donation-qr";
 
@@ -55,7 +55,7 @@ async function readUploadResponse(response: Response) {
 async function uploadLargeEafile(file: File, onProgress: (percentage: number) => void) {
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/-+/g, "-");
   const pathname = `ea-files/${crypto.randomUUID()}-${safeName || "ea-package"}`;
-  const blob = await upload(pathname, file, {
+  const blob = await uploadPresigned(pathname, file, {
     access: "public",
     contentType: "application/octet-stream",
     handleUploadUrl: "/api/upload-large",
