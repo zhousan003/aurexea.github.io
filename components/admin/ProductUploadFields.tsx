@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
+import { put } from "@vercel/blob/client";
 
 type UploadKind = "product-image" | "ea-file" | "donation-qr";
 
@@ -30,6 +31,10 @@ const uploadCopy: Record<UploadKind, { title: string; hint: string; accept: stri
   },
 };
 
+function fileNameFromUrl(url: string) {
+  return url.split("/").pop() || "已配置文件";
+}
+
 async function readUploadResponse(response: Response) {
   const text = await response.text();
 
@@ -47,8 +52,32 @@ async function readUploadResponse(response: Response) {
   }
 }
 
-function fileNameFromUrl(url: string) {
-  return url.split("/").pop() || "已配置文件";
+async function uploadLargeEafile(file: File) {
+  const response = await fetch("/api/upload-large", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      pathname: file.name,
+      multipart: file.size > 5 * 1024 * 1024,
+    }),
+  });
+  const result = await response.json().catch(() => null) as null | { token?: string; message?: string };
+
+  if (!response.ok || !result?.token) {
+    throw new Error(result?.message || "上传失败，请稍后重试。");
+  }
+
+  const blob = await put(file.name, file, {
+    access: "public",
+    multipart: true,
+    token: result.token,
+  });
+
+  if (!blob?.url) {
+    throw new Error(result.message || "上传失败，请稍后重试。");
+  }
+
+  return blob.url;
 }
 
 function UploadBox({
@@ -81,29 +110,44 @@ function UploadBox({
 
     setUpload({ status: "uploading", fileName: file.name, message: "正在上传..." });
 
-    const formData = new FormData();
-    formData.append("kind", kind);
-    formData.append("file", file);
-
     try {
-      const response = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
-      const result = await readUploadResponse(response);
+      if (kind === "ea-file") {
+        const url = await uploadLargeEafile(file);
+        if (!url) {
+          throw new Error("上传失败，请稍后重试。");
+        }
+        setUpload({
+          status: "done",
+          fileName: file.name,
+          url,
+          message: "上传成功",
+        });
+        setSelectedUrl(url);
+        setSelectedFileName(file.name);
+      } else {
+        const formData = new FormData();
+        formData.append("kind", kind);
+        formData.append("file", file);
 
-      if (!response.ok || !result.ok || !result.url) {
-        throw new Error(result.message || "上传失败，请稍后重试。");
+        const response = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
+        const result = await readUploadResponse(response);
+
+        if (!response.ok || !result.ok || !result.url) {
+          throw new Error(result.message || "上传失败，请稍后重试。");
+        }
+
+        setUpload({
+          status: "done",
+          fileName: result.fileName || file.name,
+          url: result.url,
+          message: "上传成功",
+        });
+        setSelectedUrl(result.url || "");
+        setSelectedFileName(result.fileName || file.name);
       }
-
-      setUpload({
-        status: "done",
-        fileName: result.fileName || file.name,
-        url: result.url,
-        message: "上传成功",
-      });
-      setSelectedUrl(result.url || "");
-      setSelectedFileName(result.fileName || file.name);
     } catch (error) {
       setUpload({
         status: "error",
