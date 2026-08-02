@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { put } from "@vercel/blob/client";
+import { upload } from "@vercel/blob/client";
 
 type UploadKind = "product-image" | "ea-file" | "donation-qr";
 
@@ -52,29 +52,19 @@ async function readUploadResponse(response: Response) {
   }
 }
 
-async function uploadLargeEafile(file: File) {
-  const response = await fetch("/api/upload-large", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({
-      pathname: file.name,
-      multipart: file.size > 5 * 1024 * 1024,
-    }),
-  });
-  const result = await response.json().catch(() => null) as null | { token?: string; message?: string };
-
-  if (!response.ok || !result?.token) {
-    throw new Error(result?.message || "上传失败，请稍后重试。");
-  }
-
-  const blob = await put(file.name, file, {
+async function uploadLargeEafile(file: File, onProgress: (percentage: number) => void) {
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]+/g, "-").replace(/-+/g, "-");
+  const pathname = `ea-files/${crypto.randomUUID()}-${safeName || "ea-package"}`;
+  const blob = await upload(pathname, file, {
     access: "public",
-    multipart: true,
-    token: result.token,
+    contentType: "application/octet-stream",
+    handleUploadUrl: "/api/upload-large",
+    multipart: file.size > 5 * 1024 * 1024,
+    onUploadProgress: (event) => onProgress(event.percentage),
   });
 
   if (!blob?.url) {
-    throw new Error(result.message || "上传失败，请稍后重试。");
+    throw new Error("Vercel Blob 没有返回文件地址。");
   }
 
   return blob.url;
@@ -112,7 +102,13 @@ function UploadBox({
 
     try {
       if (kind === "ea-file") {
-        const url = await uploadLargeEafile(file);
+        const url = await uploadLargeEafile(file, (percentage) => {
+          setUpload({
+            status: "uploading",
+            fileName: file.name,
+            message: `正在上传 ${percentage}%...`,
+          });
+        });
         if (!url) {
           throw new Error("上传失败，请稍后重试。");
         }
