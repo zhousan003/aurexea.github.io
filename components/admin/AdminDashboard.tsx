@@ -1,5 +1,6 @@
 type DashboardData = {
   todayVisits: number;
+  todayUniqueVisitors: number;
   todayDownloads: number;
   publishedProducts: number;
   activeAds: number;
@@ -22,7 +23,12 @@ export function AdminDashboard({ data }: { data: DashboardData }) {
         <article className="metric-card">
           <span>今日访问量</span>
           <strong>{data.todayVisits.toLocaleString()}</strong>
-          <small>来自 visit_events 实时统计</small>
+          <small>所有页面浏览次数</small>
+        </article>
+        <article className="metric-card">
+          <span>今日独立访客</span>
+          <strong>{data.todayUniqueVisitors.toLocaleString()}</strong>
+          <small>按匿名 IP 指纹去重</small>
         </article>
         <article className="metric-card">
           <span>今日下载</span>

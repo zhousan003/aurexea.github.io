@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { Locale } from "@prisma/client";
+import { getClientIp, hashVisitorIp } from "@/lib/analytics-utils";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 
 export async function POST(request: Request) {
@@ -20,6 +21,7 @@ export async function POST(request: Request) {
 
     if (product) {
       const fileId = body.fileId || product.files[0]?.id || null;
+      const ipHash = hashVisitorIp(getClientIp(request.headers));
       await prisma.$transaction([
         prisma.product.update({
           where: { id: product.id },
@@ -35,6 +37,7 @@ export async function POST(request: Request) {
             fileId,
             locale,
             country: request.headers.get("x-vercel-ip-country"),
+            ipHash,
           },
         }),
       ]).catch(() => null);

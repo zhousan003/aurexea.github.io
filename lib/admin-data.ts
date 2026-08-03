@@ -1,4 +1,5 @@
 import { Prisma, PublishStatus } from "@prisma/client";
+import { startOfLocalDay } from "@/lib/analytics-utils";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 import { getLocalCategories, getLocalCategoryById, getLocalProductById, getLocalProducts } from "@/lib/local-store";
 
@@ -174,16 +175,11 @@ export async function getAdminSeoSettings() {
   }
 }
 
-function startOfToday() {
-  const date = new Date();
-  date.setHours(0, 0, 0, 0);
-  return date;
-}
-
 export async function getAdminDashboardData() {
   if (!hasDatabaseUrl()) {
     return {
       todayVisits: 0,
+      todayUniqueVisitors: 0,
       todayDownloads: 0,
       publishedProducts: 0,
       activeAds: 0,
@@ -193,9 +189,18 @@ export async function getAdminDashboardData() {
   }
 
   try {
-    const today = startOfToday();
-    const [todayVisits, todayDownloads, publishedProducts, activeAds, downloadRanking] = await Promise.all([
+    const today = startOfLocalDay();
+    const [todayVisits, todayUniqueVisitors, todayDownloads, publishedProducts, activeAds, downloadRanking] = await Promise.all([
       prisma.visitEvent.count({ where: { createdAt: { gte: today } } }),
+      prisma.visitEvent
+        .groupBy({
+          by: ["ipHash"],
+          where: {
+            createdAt: { gte: today },
+            ipHash: { not: null },
+          },
+        })
+        .then((visitors) => visitors.length),
       prisma.downloadEvent.count({ where: { createdAt: { gte: today } } }),
       prisma.product.count({ where: { status: PublishStatus.PUBLISHED } }),
       prisma.adSlot.count({ where: { isActive: true } }),
@@ -238,6 +243,7 @@ export async function getAdminDashboardData() {
 
     return {
       todayVisits,
+      todayUniqueVisitors,
       todayDownloads,
       publishedProducts,
       activeAds,
@@ -251,6 +257,7 @@ export async function getAdminDashboardData() {
   } catch {
     return {
       todayVisits: 0,
+      todayUniqueVisitors: 0,
       todayDownloads: 0,
       publishedProducts: 0,
       activeAds: 0,
