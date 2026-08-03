@@ -29,8 +29,19 @@ export type ProductCard = {
 export const site = {
   name: "AurexEA",
   brandZh: "曜汇EA",
-  siteUrl: "https://aurexea.com",
+  siteUrl: getSiteUrl(),
 };
+
+function getSiteUrl() {
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
+  const isLocalUrl = configuredUrl ? /^(https?:\/\/)?(localhost|127\.0\.0\.1)(:\d+)?$/i.test(configuredUrl) : false;
+
+  if (process.env.NODE_ENV === "production" && isLocalUrl) {
+    return "https://www.aurexea.cc";
+  }
+
+  return configuredUrl || "https://www.aurexea.cc";
+}
 
 export const products: ProductCard[] = [
   {

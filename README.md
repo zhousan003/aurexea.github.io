@@ -32,7 +32,7 @@ DATABASE_URL="postgresql://USER:PASSWORD@HOST:5432/aurexea?schema=public"
 AUTH_SECRET="replace-with-random-secret"
 ADMIN_EMAIL="admin@example.com"
 ADMIN_PASSWORD="change-this-password"
-NEXT_PUBLIC_SITE_URL="https://aurexea.com"
+NEXT_PUBLIC_SITE_URL="https://www.aurexea.cc"
 BLOB_READ_WRITE_TOKEN="vercel-blob-token"
 ```
 
