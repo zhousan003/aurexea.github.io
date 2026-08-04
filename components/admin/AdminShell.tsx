@@ -9,6 +9,7 @@ const nav = [
   ["打赏配置", "/admin/donations"],
   ["SEO设置", "/admin/seo"],
   ["访问统计", "/admin/analytics"],
+  ["留言管理", "/admin/messages"],
 ];
 
 export function AdminShell({ children }: { children: React.ReactNode }) {

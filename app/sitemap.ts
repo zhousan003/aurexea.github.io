@@ -78,6 +78,20 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
       alternates: languageAlternates("/zh/popular", "/en/popular"),
     },
+    {
+      url: absoluteUrl("/zh/messages"),
+      lastModified: generatedAt,
+      changeFrequency: "daily",
+      priority: 0.6,
+      alternates: languageAlternates("/zh/messages", "/en/messages"),
+    },
+    {
+      url: absoluteUrl("/en/messages"),
+      lastModified: generatedAt,
+      changeFrequency: "daily",
+      priority: 0.6,
+      alternates: languageAlternates("/zh/messages", "/en/messages"),
+    },
   ];
 
   const productEntries: MetadataRoute.Sitemap = products.flatMap((product) => {

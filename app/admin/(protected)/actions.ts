@@ -524,3 +524,57 @@ export async function saveSeoSetting(formData: FormData) {
   revalidatePath("/admin/seo");
   revalidatePath(path);
 }
+
+export async function replyGuestMessage(formData: FormData) {
+  await requireAdmin();
+  requireDatabase();
+
+  const id = str(formData, "id");
+  const reply = optionalStr(formData, "reply");
+  const status = publishStatus(str(formData, "status"));
+
+  await prisma.guestMessage.update({
+    where: { id },
+    data: {
+      reply,
+      status,
+      repliedAt: reply ? new Date() : null,
+    },
+  });
+
+  revalidatePath("/admin/messages");
+  revalidatePath("/zh/messages");
+  revalidatePath("/en/messages");
+}
+
+export async function setGuestMessageStatus(formData: FormData) {
+  await requireAdmin();
+  requireDatabase();
+
+  const id = str(formData, "id");
+  const status = publishStatus(str(formData, "status"));
+
+  await prisma.guestMessage.update({
+    where: { id },
+    data: { status },
+  });
+
+  revalidatePath("/admin/messages");
+  revalidatePath("/zh/messages");
+  revalidatePath("/en/messages");
+}
+
+export async function deleteGuestMessage(formData: FormData) {
+  await requireAdmin();
+  requireDatabase();
+
+  const id = str(formData, "id");
+
+  await prisma.guestMessage.delete({
+    where: { id },
+  });
+
+  revalidatePath("/admin/messages");
+  revalidatePath("/zh/messages");
+  revalidatePath("/en/messages");
+}

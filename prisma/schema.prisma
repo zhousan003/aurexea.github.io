@@ -196,3 +196,19 @@ model SeoSetting {
 
   @@unique([path, locale])
 }
+
+model GuestMessage {
+  id        String        @id @default(cuid())
+  locale    Locale        @default(zh)
+  name      String
+  email     String?
+  content   String
+  reply     String?
+  status    PublishStatus @default(DRAFT)
+  country   String?
+  userAgent String?
+  ipHash    String?
+  repliedAt DateTime?
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+}

@@ -12,7 +12,7 @@ function firstHeaderValue(value: string | null) {
   return value?.split(",").map((item) => item.trim()).find(Boolean) || null;
 }
 
-export function getClientIp(headers: Headers) {
+export function getClientIp(headers: Pick<Headers, "get">) {
   for (const header of IP_HEADERS) {
     const value = firstHeaderValue(headers.get(header));
     if (value) {

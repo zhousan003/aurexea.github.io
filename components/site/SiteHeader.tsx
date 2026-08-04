@@ -11,12 +11,14 @@ const nav = {
     ["MT4EA", "/zh/mt4ea"],
     ["MT5EA", "/zh/mt5ea"],
     ["热门 EA", "/zh/popular"],
+    ["留言板", "/zh/messages"],
   ],
   en: [
     ["Home", "/en"],
     ["MT4 EA", "/en/mt4ea"],
     ["MT5 EA", "/en/mt5ea"],
     ["Popular EA", "/en/popular"],
+    ["Messages", "/en/messages"],
   ],
 } satisfies Record<Locale, Array<[string, string]>>;
 

@@ -1318,6 +1318,178 @@ select {
   border-bottom: 1px solid var(--line);
 }
 
+.message-page {
+  width: min(1180px, calc(100% - 36px));
+  margin: 28px auto 70px;
+}
+
+.message-hero,
+.message-form-panel,
+.message-list-panel,
+.message-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.message-hero {
+  padding: clamp(24px, 4vw, 42px);
+  background:
+    linear-gradient(120deg, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0.76)),
+    radial-gradient(circle at 85% 12%, rgba(197, 155, 67, 0.22), transparent 32%),
+    #fffdf8;
+}
+
+.message-hero h1 {
+  max-width: 760px;
+  margin: 8px 0 12px;
+  font-size: clamp(34px, 5vw, 58px);
+  line-height: 1.02;
+}
+
+.message-hero p {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.75;
+}
+
+.message-layout {
+  display: grid;
+  grid-template-columns: minmax(320px, 0.78fr) minmax(0, 1.22fr);
+  gap: 18px;
+  margin-top: 18px;
+}
+
+.message-form-panel,
+.message-list-panel {
+  padding: 20px;
+}
+
+.compact-bar {
+  margin-bottom: 16px;
+}
+
+.message-form {
+  display: grid;
+  gap: 14px;
+}
+
+.message-form label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.message-form input,
+.message-form textarea {
+  width: 100%;
+  min-height: 44px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  color: var(--ink);
+  background: #fff;
+}
+
+.message-form textarea {
+  min-height: 170px;
+  resize: vertical;
+}
+
+.hidden-field {
+  position: absolute;
+  left: -9999px;
+}
+
+.message-list {
+  display: grid;
+  gap: 14px;
+}
+
+.message-card {
+  padding: 18px;
+  box-shadow: none;
+}
+
+.message-meta,
+.admin-message-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.message-meta strong,
+.admin-message-head strong {
+  display: block;
+  font-size: 16px;
+}
+
+.message-meta span,
+.admin-message-head span,
+.admin-message-email {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.message-card > p,
+.message-reply p,
+.admin-message-content {
+  color: #4e4942;
+  line-height: 1.75;
+  white-space: pre-wrap;
+}
+
+.message-reply {
+  margin-top: 14px;
+  border-left: 3px solid var(--gold);
+  padding: 12px 14px;
+  border-radius: 0 8px 8px 0;
+  background: #fffaf0;
+}
+
+.message-reply span {
+  color: var(--gold-dark);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.empty-message {
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  color: var(--muted);
+  background: #fffdf8;
+}
+
+.admin-message-list {
+  display: grid;
+  gap: 16px;
+}
+
+.admin-message-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 18px;
+  background: #fffdf8;
+}
+
+.compact-admin-form {
+  margin-top: 14px;
+}
+
+.message-actions-row {
+  margin-top: 12px;
+}
+
+.align-end {
+  align-self: end;
+}
+
 .admin-page {
   min-height: 100vh;
   padding: 22px;
@@ -1599,6 +1771,12 @@ select {
   border-color: rgba(23, 132, 95, 0.24);
   color: var(--green);
   background: #f4fff8;
+}
+
+.admin-toast.error {
+  border-color: rgba(185, 79, 68, 0.26);
+  color: var(--red);
+  background: #fff6f4;
 }
 
 .visually-hidden {
@@ -1911,6 +2089,7 @@ code {
 @media (max-width: 1180px) {
   .store-hero,
   .shop-layout,
+  .message-layout,
   .product-detail,
   .admin-shell {
     grid-template-columns: 1fr;

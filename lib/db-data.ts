@@ -37,6 +37,15 @@ export type PublicDonationSetting = {
   qr2ImageUrl: string | null;
 };
 
+export type PublicGuestMessage = {
+  id: string;
+  name: string;
+  content: string;
+  reply: string | null;
+  createdAt: string;
+  repliedAt: string | null;
+};
+
 const productInclude = {
   category: {
     include: {
@@ -255,6 +264,36 @@ export async function getDonationSetting(): Promise<PublicDonationSetting | null
     });
   } catch {
     return null;
+  }
+}
+
+export async function getPublicGuestMessages(locale: Locale, limit = 12): Promise<PublicGuestMessage[]> {
+  if (!hasDatabaseUrl()) {
+    return [];
+  }
+
+  try {
+    const messages = await prisma.guestMessage.findMany({
+      where: {
+        locale: locale === "en" ? PrismaLocale.en : PrismaLocale.zh,
+        status: PublishStatus.PUBLISHED,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      take: limit,
+    });
+
+    return messages.map((message) => ({
+      id: message.id,
+      name: message.name,
+      content: message.content,
+      reply: message.reply,
+      createdAt: message.createdAt.toISOString(),
+      repliedAt: message.repliedAt?.toISOString() || null,
+    }));
+  } catch {
+    return [];
   }
 }
 

@@ -29,6 +29,8 @@ export type AdminCategory = Prisma.CategoryGetPayload<{
   };
 }>;
 
+export type AdminGuestMessage = Prisma.GuestMessageGetPayload<Record<string, never>>;
+
 export async function getAdminProducts() {
   if (!hasDatabaseUrl()) return getLocalProducts();
 
@@ -169,6 +171,20 @@ export async function getAdminSeoSettings() {
   try {
     return await prisma.seoSetting.findMany({
       orderBy: [{ path: "asc" }, { locale: "asc" }],
+    });
+  } catch {
+    return [];
+  }
+}
+
+export async function getAdminGuestMessages() {
+  if (!hasDatabaseUrl()) return [];
+
+  try {
+    return await prisma.guestMessage.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
     });
   } catch {
     return [];
