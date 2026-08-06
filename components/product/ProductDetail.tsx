@@ -1,14 +1,55 @@
 import Link from "next/link";
+import { JsonLd } from "@/components/site/JsonLd";
 import type { Locale, ProductCard } from "@/lib/site-data";
-import { formatProductPrice, getLocalizedTitle } from "@/lib/site-data";
+import { formatProductPrice, getLocalizedTitle, site } from "@/lib/site-data";
 
 export function ProductDetail({ locale, product }: { locale: Locale; product: ProductCard }) {
   const zh = locale === "zh";
   const title = getLocalizedTitle(locale, product);
   const description = zh ? product.descriptionZh : product.descriptionEn;
+  const canonical = new URL(`/${locale}/products/${product.slug}`, site.siteUrl).toString();
+  const productImage = product.thumbnailUrl ? new URL(product.thumbnailUrl, site.siteUrl).toString() : undefined;
+  const structuredData = [
+    {
+      "@context": "https://schema.org",
+      "@type": "SoftwareApplication",
+      name: title,
+      description: description || (zh ? product.excerptZh : product.excerptEn),
+      applicationCategory: "FinanceApplication",
+      operatingSystem: "Windows",
+      url: canonical,
+      ...(productImage ? { image: productImage } : {}),
+      offers: {
+        "@type": "Offer",
+        price: "0",
+        priceCurrency: "USD",
+        availability: "https://schema.org/InStock",
+        url: canonical,
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: zh ? "首页" : "Home",
+          item: new URL(`/${locale}`, site.siteUrl).toString(),
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: title,
+          item: canonical,
+        },
+      ],
+    },
+  ];
 
   return (
     <>
+      <JsonLd data={structuredData} />
       <div className="product-detail">
         <div className="detail-gallery">
           <div className={`terminal-preview detail-main-media${product.thumbnailUrl ? " has-image" : ""}`}>
