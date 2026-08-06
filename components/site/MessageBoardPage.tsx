@@ -1,4 +1,3 @@
-import { submitGuestMessage } from "@/app/message-actions";
 import type { PublicGuestMessage } from "@/lib/db-data";
 import type { Locale } from "@/lib/site-data";
 
@@ -53,7 +52,7 @@ export function MessageBoardPage({
               {zh ? "请填写昵称和至少 6 个字的留言内容。" : "Please enter your name and a message of at least 6 characters."}
             </div>
           ) : null}
-          <form className="message-form" action={submitGuestMessage}>
+          <form className="message-form" action="/api/messages" method="post">
             <input type="hidden" name="locale" value={locale} />
             <label className="hidden-field">
               Website
