@@ -1,6 +1,6 @@
 import { AdNetwork, AdPlacement, Locale as PrismaLocale, Prisma, ProductPlatform, PublishStatus } from "@prisma/client";
 import type { Locale, ProductCard } from "@/lib/site-data";
-import { products as fallbackProducts } from "@/lib/site-data";
+import { defaultAdSenseClientId, products as fallbackProducts } from "@/lib/site-data";
 import { getLocalCategories, getLocalProductCardBySlug, getLocalProductCards } from "@/lib/local-store";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 
@@ -249,6 +249,22 @@ export async function getDownloadAdSlot(): Promise<PublicAdSlot | null> {
   } catch {
     return null;
   }
+}
+
+function extractAdSenseClientId(code: string | null | undefined) {
+  if (!code) {
+    return null;
+  }
+
+  const clientId = code.match(/(?:client=|data-ad-client=["'])(ca-pub-\d{10,})/i)?.[1] || code.match(/\b(ca-pub-\d{10,})\b/i)?.[1];
+  return clientId || null;
+}
+
+export async function getGlobalAdSenseClientId() {
+  const adSlot = await getDownloadAdSlot();
+  const configuredClientId = extractAdSenseClientId(adSlot?.desktopCode) || extractAdSenseClientId(adSlot?.mobileCode) || extractAdSenseClientId(adSlot?.fallbackCode);
+
+  return configuredClientId || defaultAdSenseClientId;
 }
 
 export async function getDonationSetting(): Promise<PublicDonationSetting | null> {

@@ -26,6 +26,10 @@ export type ProductCard = {
   createdAt?: string;
 };
 
+export const defaultAdSenseClientId = "ca-pub-2360255171901038";
+
+const officialSiteUrl = "https://www.aurexea.cc";
+
 export const site = {
   name: "AurexEA",
   brandZh: "曜汇EA",
@@ -35,12 +39,26 @@ export const site = {
 function getSiteUrl() {
   const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim().replace(/\/+$/, "");
   const isLocalUrl = configuredUrl ? /^(https?:\/\/)?(localhost|127\.0\.0\.1)(:\d+)?$/i.test(configuredUrl) : false;
+  const hostname = configuredUrl ? getHostname(configuredUrl) : "";
+  const isVercelGeneratedUrl = /\.vercel\.app$/i.test(hostname);
 
-  if (process.env.NODE_ENV === "production" && isLocalUrl) {
-    return "https://www.aurexea.cc";
+  if (process.env.NODE_ENV === "production" && (isLocalUrl || isVercelGeneratedUrl)) {
+    return officialSiteUrl;
   }
 
-  return configuredUrl || "https://www.aurexea.cc";
+  return configuredUrl || officialSiteUrl;
+}
+
+function getHostname(url: string) {
+  try {
+    return new URL(url).hostname;
+  } catch {
+    try {
+      return new URL(`https://${url}`).hostname;
+    } catch {
+      return "";
+    }
+  }
 }
 
 export const products: ProductCard[] = [
