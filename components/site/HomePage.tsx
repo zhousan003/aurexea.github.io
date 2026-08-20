@@ -2,16 +2,18 @@ import Link from "next/link";
 import { ProductCard } from "@/components/product/ProductCard";
 import type { Locale } from "@/lib/site-data";
 import type { ProductCard as ProductCardType } from "@/lib/site-data";
-import type { PublicCategory } from "@/lib/db-data";
+import type { PublicCategory, PublicPlatformCounts } from "@/lib/db-data";
 
 export function HomePage({
   locale,
   products,
   categories,
+  platformCounts,
 }: {
   locale: Locale;
   products: ProductCardType[];
   categories: PublicCategory[];
+  platformCounts: PublicPlatformCounts;
 }) {
   const zh = locale === "zh";
   const featured = products[0];
@@ -54,8 +56,8 @@ export function HomePage({
           </div>
           <section className="side-section">
             <h2>{zh ? "热门分类" : "Popular Categories"}</h2>
-            <Link href={`/${locale}/mt4ea`}>MT4EA <span>{products.filter((product) => product.platform === "MT4" || product.platform === "BOTH").length}</span></Link>
-            <Link href={`/${locale}/mt5ea`}>MT5EA <span>{products.filter((product) => product.platform === "MT5" || product.platform === "BOTH").length}</span></Link>
+            <Link href={`/${locale}/mt4ea`}>MT4EA <span>{platformCounts.mt4}</span></Link>
+            <Link href={`/${locale}/mt5ea`}>MT5EA <span>{platformCounts.mt5}</span></Link>
             {categories.slice(0, 2).map((category) => (
               <Link key={category.id} href={`/${locale}/popular`}>
                 {zh ? category.nameZh : category.nameEn} <span>{category.productCount}</span>

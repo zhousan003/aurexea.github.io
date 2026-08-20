@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { HomePage } from "@/components/site/HomePage";
 import { SiteHeader } from "@/components/site/SiteHeader";
-import { getCategories, getProducts } from "@/lib/db-data";
+import { getCategories, getPlatformCounts, getProducts } from "@/lib/db-data";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata: Metadata = createMetadata(
@@ -12,9 +12,10 @@ export const metadata: Metadata = createMetadata(
 );
 
 export default async function ZhHomePage() {
-  const [products, categories] = await Promise.all([
+  const [products, categories, platformCounts] = await Promise.all([
     getProducts({ locale: "zh", limit: 8 }),
     getCategories(),
+    getPlatformCounts(),
   ]);
 
   return (
@@ -22,7 +23,7 @@ export default async function ZhHomePage() {
       <SiteHeader locale="zh" />
       <main>
         <section className="view is-visible">
-          <HomePage locale="zh" products={products} categories={categories} />
+          <HomePage locale="zh" products={products} categories={categories} platformCounts={platformCounts} />
         </section>
       </main>
     </>

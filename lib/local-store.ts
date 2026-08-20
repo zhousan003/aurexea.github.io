@@ -253,6 +253,20 @@ export async function getLocalProductCards(options: {
   return typeof options.limit === "number" ? cards.slice(0, options.limit) : cards;
 }
 
+export async function getLocalPlatformCounts() {
+  const products = await getLocalProducts();
+  const publishedProducts = products.filter((product) => product.status === PublishStatus.PUBLISHED);
+
+  return {
+    mt4: publishedProducts.filter(
+      (product) => product.platform === ProductPlatform.MT4 || product.platform === ProductPlatform.BOTH,
+    ).length,
+    mt5: publishedProducts.filter(
+      (product) => product.platform === ProductPlatform.MT5 || product.platform === ProductPlatform.BOTH,
+    ).length,
+  };
+}
+
 export async function getLocalProductCardBySlug(slug: string) {
   const products = await getLocalProducts();
   const product = products.find((item) => item.slug === slug && item.status === PublishStatus.PUBLISHED);

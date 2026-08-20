@@ -1,7 +1,7 @@
 import { AdNetwork, AdPlacement, Locale as PrismaLocale, Prisma, ProductPlatform, PublishStatus } from "@prisma/client";
 import type { Locale, ProductCard } from "@/lib/site-data";
 import { defaultAdSenseClientId, products as fallbackProducts } from "@/lib/site-data";
-import { getLocalCategories, getLocalProductCardBySlug, getLocalProductCards } from "@/lib/local-store";
+import { getLocalCategories, getLocalPlatformCounts, getLocalProductCardBySlug, getLocalProductCards } from "@/lib/local-store";
 import { hasDatabaseUrl, prisma } from "@/lib/prisma";
 
 export type PublicCategory = {
@@ -10,6 +10,11 @@ export type PublicCategory = {
   nameZh: string;
   nameEn: string;
   productCount: number;
+};
+
+export type PublicPlatformCounts = {
+  mt4: number;
+  mt5: number;
 };
 
 export type PublicAdSlot = {
@@ -228,6 +233,33 @@ export async function getCategories(): Promise<PublicCategory[]> {
     }));
   } catch {
     return [];
+  }
+}
+
+export async function getPlatformCounts(): Promise<PublicPlatformCounts> {
+  if (!hasDatabaseUrl()) {
+    return getLocalPlatformCounts();
+  }
+
+  try {
+    const [mt4, mt5] = await Promise.all([
+      prisma.product.count({
+        where: {
+          status: PublishStatus.PUBLISHED,
+          platform: { in: [ProductPlatform.MT4, ProductPlatform.BOTH] },
+        },
+      }),
+      prisma.product.count({
+        where: {
+          status: PublishStatus.PUBLISHED,
+          platform: { in: [ProductPlatform.MT5, ProductPlatform.BOTH] },
+        },
+      }),
+    ]);
+
+    return { mt4, mt5 };
+  } catch {
+    return getLocalPlatformCounts();
   }
 }
 
