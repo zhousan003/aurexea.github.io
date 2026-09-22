@@ -92,6 +92,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.6,
       alternates: languageAlternates("/zh/messages", "/en/messages"),
     },
+    {
+      url: absoluteUrl("/zh/privacy"),
+      lastModified: generatedAt,
+      changeFrequency: "yearly",
+      priority: 0.4,
+    },
   ];
 
   const productEntries: MetadataRoute.Sitemap = products.flatMap((product) => {
