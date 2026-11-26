@@ -4,12 +4,17 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { getCategories, getPlatformCounts, getProducts } from "@/lib/db-data";
 import { createMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = createMetadata(
+export const revalidate = 3600;
+
+const title = "Free MT4/MT5 Expert Advisor Downloads · AurexEA";
+const homeMetadata = createMetadata(
   "en",
-  "Free MT4/MT5 Expert Advisors - AurexEA",
+  title,
   "Download free MT4/MT5 Expert Advisors, SetFiles and trading tools.",
   "/en",
 );
+
+export const metadata: Metadata = { ...homeMetadata, title: { absolute: title } };
 
 export default async function EnHomePage() {
   const [products, categories, platformCounts] = await Promise.all([

@@ -4,6 +4,8 @@ import { DownloadWait } from "@/components/download/DownloadWait";
 import { SiteHeader } from "@/components/site/SiteHeader";
 import { getDownloadAdSlot, getProductBySlug } from "@/lib/db-data";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   robots: {
     index: false,

@@ -6,12 +6,15 @@ import { createMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = createMetadata(
-  "en",
-  "EA Message Board - AurexEA",
-  "Leave EA requests, download issues, setfile needs and trading tool feedback on AurexEA. Admin replies are published after review.",
-  "/en/messages",
-);
+export const metadata: Metadata = {
+  ...createMetadata(
+    "en",
+    "EA Message Board - AurexEA",
+    "Leave EA requests, download issues, setfile needs and trading tool feedback on AurexEA. Admin replies are published after review.",
+    "/en/messages",
+  ),
+  robots: { index: false, follow: true },
+};
 
 export default async function EnMessagesPage({
   searchParams,

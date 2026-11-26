@@ -9,8 +9,13 @@ export type ProductCard = {
   excerptEn: string;
   descriptionZh?: string;
   descriptionEn?: string;
+  seoTitleZh?: string | null;
+  seoTitleEn?: string | null;
+  seoDescZh?: string | null;
+  seoDescEn?: string | null;
   platform: "MT4" | "MT5" | "BOTH";
   symbol: string;
+  timeframes?: string[];
   tagZh: string;
   tagEn: string;
   categorySlug?: string;
@@ -24,6 +29,7 @@ export type ProductCard = {
   downloadCount?: number;
   isPopular?: boolean;
   createdAt?: string;
+  publishedAt?: string;
 };
 
 export const defaultAdSenseClientId = "ca-pub-2360255171901038";

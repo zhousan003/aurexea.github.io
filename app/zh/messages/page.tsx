@@ -6,12 +6,15 @@ import { createMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
 
-export const metadata: Metadata = createMetadata(
-  "zh",
-  "EA 留言板 - 曜汇EA",
-  "在曜汇EA留言提交 EA 需求、下载问题、参数文件需求和使用反馈，管理员审核后公开回复。",
-  "/zh/messages",
-);
+export const metadata: Metadata = {
+  ...createMetadata(
+    "zh",
+    "EA 留言板 - 曜汇EA",
+    "在曜汇EA留言提交 EA 需求、下载问题、参数文件需求和使用反馈，管理员审核后公开回复。",
+    "/zh/messages",
+  ),
+  robots: { index: false, follow: true },
+};
 
 export default async function ZhMessagesPage({
   searchParams,

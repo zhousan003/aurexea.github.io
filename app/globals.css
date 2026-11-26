@@ -1178,6 +1178,11 @@ select {
   padding: 24px;
 }
 
+.product-description {
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
 .content-tabs h2 {
   margin-bottom: 12px;
 }
@@ -1614,6 +1619,12 @@ select {
   min-height: 106px;
   padding: 12px;
   resize: vertical;
+}
+
+.admin-form .product-description-input {
+  min-height: 150px;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }
 
 .admin-form .code-area {

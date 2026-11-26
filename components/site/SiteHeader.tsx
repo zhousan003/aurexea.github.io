@@ -22,8 +22,8 @@ const nav = {
   ],
 } satisfies Record<Locale, Array<[string, string]>>;
 
-export async function SiteHeader({ locale }: { locale: Locale }) {
-  const otherLocaleHref = locale === "zh" ? "/en" : "/zh";
+export async function SiteHeader({ locale, alternatePath = "" }: { locale: Locale; alternatePath?: string }) {
+  const otherLocaleHref = `/${locale === "zh" ? "en" : "zh"}${alternatePath}`;
   const otherLocaleLabel = locale === "zh" ? "English" : "中文";
   const donationSetting = await getDonationSetting();
 

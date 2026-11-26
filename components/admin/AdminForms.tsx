@@ -112,8 +112,23 @@ export function ProductAdminPage({
               <label>状态<select name="status" defaultValue={editingProduct?.status || "PUBLISHED"}><option value="PUBLISHED">上架</option><option value="ARCHIVED">下架</option><option value="DRAFT">草稿</option></select></label>
             </div>
             <label className="checkbox-line"><input name="isPopular" type="checkbox" defaultChecked={editingProduct?.isPopular ?? true} /> 热门 EA</label>
-            <label>中文详情<textarea name="descriptionZh" className="code-area" defaultValue={zhTranslation?.description || "策略逻辑、适用品种、安装步骤、参数建议、回测说明和版本更新记录。"} /></label>
-            <label>英文详情<textarea name="descriptionEn" className="code-area" defaultValue={enTranslation?.description || "Strategy logic, supported symbols, setup steps, parameters, backtest notes and version updates."} /></label>
+            <label>
+              中文详情
+              <textarea name="descriptionZh" className="product-description-input" wrap="soft" defaultValue={zhTranslation?.description ?? ""} />
+            </label>
+            <label>
+              英文详情
+              <textarea name="descriptionEn" className="product-description-input" wrap="soft" defaultValue={enTranslation?.description ?? ""} />
+            </label>
+            <details>
+              <summary>产品搜索结果标题与描述</summary>
+              <div className="form-grid">
+                <label>中文 SEO 标题<input name="seoTitleZh" defaultValue={zhTranslation?.seoTitle ?? ""} /></label>
+                <label>英文 SEO 标题<input name="seoTitleEn" defaultValue={enTranslation?.seoTitle ?? ""} /></label>
+                <label>中文 SEO 描述<textarea name="seoDescZh" defaultValue={zhTranslation?.seoDesc ?? ""} /></label>
+                <label>英文 SEO 描述<textarea name="seoDescEn" defaultValue={enTranslation?.seoDesc ?? ""} /></label>
+              </div>
+            </details>
             <ProductUploadFields thumbnailUrl={defaultThumbnail} reportImages={defaultReports} fileUrl={defaultFile} />
             <div className="form-actions">
               <button className="primary-button" type="submit">保存产品</button>

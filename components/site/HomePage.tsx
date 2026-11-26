@@ -26,8 +26,8 @@ export function HomePage({
           <h1>{zh ? "最新免费 EA" : "Latest Free EAs"}</h1>
           <p>
             {zh
-              ? "按平台、交易品种、时间周期和策略类型整理 EA 资源。首页直接展示最新产品，用户可以快速筛选并进入详情下载。"
-              : "Browse MT4/MT5 EAs by platform, symbol, timeframe and strategy. The homepage highlights the newest products first."}
+              ? "免费下载 MT4 和 MT5 的 Expert Advisor（EA）、SetFiles 参数文件和量化交易工具。打开产品详情可查看交易品种、平台及已上传的测试报告。"
+              : "Download free Expert Advisors for MT4 and MT5, SetFiles, and quantitative trading tools. Product pages list supported platforms and symbols, with test reports where available."}
           </p>
         </div>
         <div className="hero-feature">
@@ -71,6 +71,7 @@ export function HomePage({
                 ? "EA 仅为自动化交易工具，历史表现不代表未来结果。实盘前请先在模拟账户测试参数、点差和滑点。"
                 : "EAs are automation tools. Past performance does not guarantee future results. Test on demo first."}
             </p>
+            <Link href={`/${locale}/about`}>{zh ? "关于曜汇EA" : "About AurexEA"}</Link>
           </section>
         </aside>
 

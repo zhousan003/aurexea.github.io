@@ -4,6 +4,8 @@ import { SiteHeader } from "@/components/site/SiteHeader";
 import { getProducts } from "@/lib/db-data";
 import { createMetadata } from "@/lib/seo";
 
+export const revalidate = 3600;
+
 export const metadata: Metadata = createMetadata(
   "zh",
   "MT4EA 免费下载 - 曜汇EA",

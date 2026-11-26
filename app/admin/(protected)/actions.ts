@@ -62,7 +62,7 @@ function publishStatus(value: string) {
 }
 
 function revalidatePublicPages(slug?: string) {
-  ["/zh", "/en", "/zh/mt4ea", "/en/mt4ea", "/zh/mt5ea", "/en/mt5ea", "/zh/popular", "/en/popular"].forEach((path) => {
+  ["/sitemap.xml", "/zh", "/en", "/zh/mt4ea", "/en/mt4ea", "/zh/mt5ea", "/en/mt5ea", "/zh/popular", "/en/popular"].forEach((path) => {
     revalidatePath(path);
   });
 
@@ -188,6 +188,10 @@ export async function saveProduct(formData: FormData) {
       titleEn,
       descriptionZh: optionalStr(formData, "descriptionZh"),
       descriptionEn: optionalStr(formData, "descriptionEn"),
+      seoTitleZh: optionalStr(formData, "seoTitleZh"),
+      seoTitleEn: optionalStr(formData, "seoTitleEn"),
+      seoDescZh: optionalStr(formData, "seoDescZh"),
+      seoDescEn: optionalStr(formData, "seoDescEn"),
       thumbnailUrl,
       reportImageUrls,
       fileUrl,
@@ -203,6 +207,9 @@ export async function saveProduct(formData: FormData) {
 
   requireDatabase();
 
+  const previousProduct = id
+    ? await prisma.product.findUnique({ where: { id }, select: { slug: true } })
+    : null;
   const product = id
     ? await prisma.product.update({
         where: { id },
@@ -274,6 +281,9 @@ export async function saveProduct(formData: FormData) {
   }
 
   revalidatePath("/admin/products");
+  if (previousProduct && previousProduct.slug !== slug) {
+    revalidatePublicPages(previousProduct.slug);
+  }
   revalidatePublicPages(slug);
   redirect(`/admin/products?saved=1&slug=${encodeURIComponent(slug)}`);
 }
@@ -454,6 +464,7 @@ export async function saveAdSlot(formData: FormData) {
   });
 
   revalidatePath("/admin/ads");
+  revalidatePath("/", "layout");
 }
 
 export async function saveDonationSetting(formData: FormData) {
@@ -492,8 +503,7 @@ export async function saveDonationSetting(formData: FormData) {
   });
 
   revalidatePath("/admin/donations");
-  revalidatePath("/zh");
-  revalidatePath("/en");
+  revalidatePath("/", "layout");
 }
 
 export async function saveSeoSetting(formData: FormData) {

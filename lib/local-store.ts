@@ -386,6 +386,10 @@ export async function saveLocalProduct(input: {
   titleEn: string;
   descriptionZh?: string | null;
   descriptionEn?: string | null;
+  seoTitleZh?: string | null;
+  seoTitleEn?: string | null;
+  seoDescZh?: string | null;
+  seoDescEn?: string | null;
   thumbnailUrl?: string | null;
   reportImageUrls?: string[];
   fileUrl?: string | null;
@@ -458,8 +462,8 @@ export async function saveLocalProduct(input: {
         title: input.titleZh,
         excerpt: input.descriptionZh?.slice(0, 120) || null,
         description: input.descriptionZh || null,
-        seoTitle: null,
-        seoDesc: null,
+        seoTitle: input.seoTitleZh || null,
+        seoDesc: input.seoDescZh || null,
       },
       {
         id: `${id}-en`,
@@ -468,8 +472,8 @@ export async function saveLocalProduct(input: {
         title: input.titleEn,
         excerpt: input.descriptionEn?.slice(0, 120) || null,
         description: input.descriptionEn || null,
-        seoTitle: null,
-        seoDesc: null,
+        seoTitle: input.seoTitleEn || null,
+        seoDesc: input.seoDescEn || null,
       },
     ],
     images: [...thumbnailImages, ...reportImages],
@@ -539,8 +543,13 @@ function mapLocalProductCard(product: LocalAdminProduct): ProductCard {
     excerptEn: en?.excerpt || en?.description?.slice(0, 80) || zh?.description?.slice(0, 80) || "",
     descriptionZh: zh?.description || "",
     descriptionEn: en?.description || zh?.description || "",
+    seoTitleZh: zh?.seoTitle,
+    seoTitleEn: en?.seoTitle,
+    seoDescZh: zh?.seoDesc,
+    seoDescEn: en?.seoDesc,
     platform: product.platform === ProductPlatform.BOTH ? "BOTH" : product.platform,
     symbol: product.symbol || "-",
+    timeframes: product.timeframes,
     tagZh: categoryZh?.name || "EA",
     tagEn: categoryEn?.name || categoryZh?.name || "EA",
     categorySlug: product.category?.slug,
@@ -554,5 +563,6 @@ function mapLocalProductCard(product: LocalAdminProduct): ProductCard {
     downloadCount: product.downloadCount,
     isPopular: product.isPopular,
     createdAt: product.createdAt.toISOString(),
+    publishedAt: product.publishedAt?.toISOString(),
   };
 }

@@ -1,9 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import { JsonLd } from "@/components/site/JsonLd";
 import { getGlobalAdSenseClientId } from "@/lib/db-data";
 import { site } from "@/lib/site-data";
-
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.siteUrl),
@@ -16,7 +15,6 @@ export const metadata: Metadata = {
   authors: [{ name: "AurexEA" }],
   creator: "AurexEA",
   publisher: "AurexEA",
-  keywords: ["免费 EA", "MT4 EA", "MT5 EA", "黄金 EA", "XAUUSD", "量化交易", "Expert Advisor"],
   openGraph: {
     title: "免费 MT4/MT5 EA 下载 - 曜汇EA",
     description: "免费获取 MT4/MT5 EA、SetFiles、指标和量化交易工具。",
@@ -46,7 +44,30 @@ export default async function RootLayout({ children }: { children: React.ReactNo
           />
         ) : null}
       </head>
-      <body>{children}</body>
+      <body>
+        <JsonLd data={{
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": `${site.siteUrl}/#organization`,
+              name: site.name,
+              alternateName: site.brandZh,
+              url: site.siteUrl,
+            },
+            {
+              "@type": "WebSite",
+              "@id": `${site.siteUrl}/#website`,
+              name: site.name,
+              alternateName: site.brandZh,
+              url: site.siteUrl,
+              inLanguage: ["zh-CN", "en"],
+              publisher: { "@id": `${site.siteUrl}/#organization` },
+            },
+          ],
+        }} />
+        {children}
+      </body>
     </html>
   );
 }

@@ -101,8 +101,13 @@ function mapProduct(product: ProductWithRelations): ProductCard {
     excerptEn: en?.excerpt || en?.description?.slice(0, 80) || zh?.description?.slice(0, 80) || "",
     descriptionZh: zh?.description || "",
     descriptionEn: en?.description || zh?.description || "",
+    seoTitleZh: zh?.seoTitle,
+    seoTitleEn: en?.seoTitle,
+    seoDescZh: zh?.seoDesc,
+    seoDescEn: en?.seoDesc,
     platform: normalizePlatform(product.platform),
     symbol: product.symbol || "-",
+    timeframes: product.timeframes,
     tagZh: categoryZh?.name || "EA",
     tagEn: categoryEn?.name || categoryZh?.name || "EA",
     categorySlug: product.category?.slug,
@@ -116,6 +121,7 @@ function mapProduct(product: ProductWithRelations): ProductCard {
     downloadCount: product.downloadCount,
     isPopular: product.isPopular,
     createdAt: product.createdAt.toISOString(),
+    publishedAt: product.publishedAt?.toISOString(),
   };
 }
 

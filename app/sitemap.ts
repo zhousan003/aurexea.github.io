@@ -14,94 +14,77 @@ function languageAlternates(zhPath: string, enPath: string) {
     languages: {
       "zh-CN": absoluteUrl(zhPath),
       en: absoluteUrl(enPath),
+      "x-default": absoluteUrl(zhPath),
     },
   };
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const products = await getProducts({ locale: "zh" });
-  const generatedAt = new Date();
   const staticEntries: MetadataRoute.Sitemap = [
     {
       url: absoluteUrl("/zh"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 1,
       alternates: languageAlternates("/zh", "/en"),
     },
     {
       url: absoluteUrl("/en"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 1,
       alternates: languageAlternates("/zh", "/en"),
     },
     {
       url: absoluteUrl("/zh/mt4ea"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 0.8,
       alternates: languageAlternates("/zh/mt4ea", "/en/mt4ea"),
     },
     {
       url: absoluteUrl("/en/mt4ea"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 0.8,
       alternates: languageAlternates("/zh/mt4ea", "/en/mt4ea"),
     },
     {
       url: absoluteUrl("/zh/mt5ea"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 0.8,
       alternates: languageAlternates("/zh/mt5ea", "/en/mt5ea"),
     },
     {
       url: absoluteUrl("/en/mt5ea"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 0.8,
       alternates: languageAlternates("/zh/mt5ea", "/en/mt5ea"),
     },
     {
       url: absoluteUrl("/zh/popular"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 0.7,
       alternates: languageAlternates("/zh/popular", "/en/popular"),
     },
     {
       url: absoluteUrl("/en/popular"),
-      lastModified: generatedAt,
       changeFrequency: "daily",
       priority: 0.7,
       alternates: languageAlternates("/zh/popular", "/en/popular"),
     },
-    {
-      url: absoluteUrl("/zh/messages"),
-      lastModified: generatedAt,
-      changeFrequency: "daily",
-      priority: 0.6,
-      alternates: languageAlternates("/zh/messages", "/en/messages"),
-    },
-    {
-      url: absoluteUrl("/en/messages"),
-      lastModified: generatedAt,
-      changeFrequency: "daily",
-      priority: 0.6,
-      alternates: languageAlternates("/zh/messages", "/en/messages"),
-    },
+    ...(["zh", "en"] as const).map((locale) => ({
+      url: absoluteUrl(`/${locale}/about`),
+      changeFrequency: "yearly" as const,
+      alternates: languageAlternates("/zh/about", "/en/about"),
+    })),
     {
       url: absoluteUrl("/zh/privacy"),
-      lastModified: generatedAt,
       changeFrequency: "yearly",
       priority: 0.4,
     },
   ];
 
   const productEntries: MetadataRoute.Sitemap = products.flatMap((product) => {
-    const lastModified = product.createdAt ? new Date(product.createdAt) : generatedAt;
+    const publishedAt = product.publishedAt || product.createdAt;
+    const lastModified = publishedAt ? new Date(publishedAt) : undefined;
     const alternates = languageAlternates(`/zh/products/${product.slug}`, `/en/products/${product.slug}`);
 
     return [
